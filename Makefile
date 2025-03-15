@@ -1,5 +1,7 @@
-CC = cc -g
-CFLAG = -Wall -Wextra -Werror
+CC = gcc
+CFLAG = 
+# CC = cc -g
+# CFLAG = -Wall -Wextra -Werror
 NAME = pipex
 
 SOURCES = ./src/pipex.c
