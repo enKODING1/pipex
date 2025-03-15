@@ -72,7 +72,7 @@
 
 int main(void)
 {
-    // ft_putstr_fd("hello", 1);
-    ft_isalnum(3);
+    ft_putstr_fd("hello", 1);
+    // printf("helloworld");
     return 0;
 }

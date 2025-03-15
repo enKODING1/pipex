@@ -7,16 +7,16 @@ OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft
 PIPEX_DIR = ./src
-LIBFT_LIB = ./lib/libft
+LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 all:$(NAME)
 
-$(NAME): $(LIBFT_DIR) $(OBJECTS)
-	$(CC) $(CFLAG) $(OBJECTS) -o $(NAME) \
+$(NAME): $(LIBFT_LIB) $(OBJECTS)
+	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
 	-I $(PIPEX_DIR) -I $(LIBFT_DIR) \
-	-L$(LIBFT_LIB) -lft
+	-L$(LIBFT_DIR) -lft
 	
-$(LIBFT_DIR): 
+$(LIBFT_LIB): 
 	make -C $(LIBFT_DIR)
 	make bonus -C $(LIBFT_DIR)
 
