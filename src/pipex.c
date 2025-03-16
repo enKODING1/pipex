@@ -61,15 +61,27 @@ char *get_cmd_path(char *cmd, char **envp)
     return NULL;
 }
 
-void exec(char **argv, char **envp)
+char **get_args(char **argv)
+{
+    int i;
+
+    i = 2;
+    while(argv[i])
+    {
+        printf("argv[%d]: %s\n", i, argv[i]);
+        i++;
+    }
+}
+
+void exec(char *argv, char **envp)
 {
     char *cmd;
     char *cmd_path;
-
+    char **args;
     
-    cmd = ft_strjoin("/", argv[1]);
-    cmd_path = get_cmd_path(cmd, envp);
-    printf("cmd_path: %s\n", cmd_path);
+    // cmd = ft_strjoin("/", argv[1]);
+    // cmd_path = get_cmd_path(cmd, envp);
+    // printf("cmd_path: %s\n", cmd_path);
     // 기대값 : cmd 실행경로가 포함된 명령어 
     /* 과정: envp 에서 PATH부분을 찾은 후, 
        access 함수를 통해 해당 명령어가 실행되는지 확인해가며
@@ -77,6 +89,8 @@ void exec(char **argv, char **envp)
     */
 
 
+
+    args = get_args(argv);
     // args도 "cmd arg1 arg2" 형태로 들어온다면 분리해서
     /*
         [
