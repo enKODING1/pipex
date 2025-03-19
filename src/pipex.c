@@ -21,7 +21,7 @@ void	child_process(int *fd, char **argv, char **envp)
 	dup2(fd[1], STDOUT_FILENO);    
 	dup2(infile_fd, STDIN_FILENO); // 읽기는 입력으로
 	close(fd[0]);                  //     exec(argv, envp);
-		//     close(infile_fd);
+		    close(infile_fd);
 	exec(argv[2], envp);
 	exit(0);
 }
@@ -56,6 +56,6 @@ int	main(int argc, char *argv[], char **envp)
 		parent_process(fd, argv, envp);
 		return (0);
 	}
-	error("arguments error\n");
+	perror("arguments error\n");
 	return (0);
 }
