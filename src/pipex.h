@@ -8,6 +8,10 @@
 #include <fcntl.h>
 #include "libft.h"
 
+/*memory*/
 void free_matrix(char **matrix);
+/*exec utils*/
+char *get_cmd_path(char *cmd, char **envp);
+void exec(char *argv, char **envp);
 
 #endif

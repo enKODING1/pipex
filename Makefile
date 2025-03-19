@@ -4,7 +4,7 @@ CFLAG =
 # CFLAG = -Wall -Wextra -Werror
 NAME = pipex
 
-SOURCES = ./src/pipex.c
+SOURCES = ./src/pipex.c ./src/pipex_utils.c
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft
