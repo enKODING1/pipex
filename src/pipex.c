@@ -10,9 +10,7 @@
 //     // 스트림 흐름제어
 //     dup2(fd[1], STDOUT_FILENO); // 모든 출력은 pipe로
 //     dup2(infile_fd, STDIN_FILENO); // 읽기는 입력으로
-//     close(fd[0]);
-//     exec(argv, envp);
-//     close(infile_fd);
+//     close(fd[0]); //     exec(argv, envp); //     close(infile_fd);
 //     exit(0);
 // }
 // // | cmd2 > file2 의 과정을 구현
@@ -32,81 +30,52 @@
 
 char *get_cmd_path(char *cmd, char **envp)
 {
-    char **path;
-    char *cmd_path;
+    char **path_list;
+    char *result;
+    int access_ok;
     int i;
 
     i = 0;
-    path = NULL;
-    cmd_path = NULL;
+    path_list = NULL;
+    result = NULL;
     while(ft_strncmp(envp[i], "PATH=", 5))
         i++;
-    printf("envp[%d]: %s\n", i, envp[i]);
-    path = ft_split(envp[i] + 5, ':');
+    path_list = ft_split(envp[i] + 5, ':');
     i = 0;
-    while(path[i])
+    while(path_list[i])
     {
-        printf("path[%d]: %s\n", i, path[i]);
-        cmd_path = ft_strjoin(path[i], cmd);
-        printf("cmd: %s\n", cmd_path);
-        printf("status: %d\n", access(cmd_path, X_OK));
-        if (access(cmd_path, X_OK) == 0)
-        {
-            return cmd_path;
-        }
-        printf("\n");
+        result = ft_strjoin(path_list[i], cmd);
+        access_ok = access(result, X_OK);
+        if (access_ok == 0)
+            break;
+        free(result);
         i++;
     }
-
+    free_matrix(path_list);
+    if (access_ok == 0)
+        return result;
     return NULL;
-}
-
-char **get_args(char **argv)
-{
-    int i;
-
-    i = 2;
-    while(argv[i])
-    {
-        printf("argv[%d]: %s\n", i, argv[i]);
-        i++;
-    }
 }
 
 void exec(char *argv, char **envp)
 {
+    char *cmd_suffix;
     char *cmd;
-    char *cmd_path;
     char **args;
     
-    // cmd = ft_strjoin("/", argv[1]);
-    // cmd_path = get_cmd_path(cmd, envp);
-    // printf("cmd_path: %s\n", cmd_path);
-    // 기대값 : cmd 실행경로가 포함된 명령어 
-    /* 과정: envp 에서 PATH부분을 찾은 후, 
-       access 함수를 통해 해당 명령어가 실행되는지 확인해가며
-       실행가능이라면 해당 경로를 반환해서 cmd에 넣음
-    */
+    args = ft_split(argv, ' ');
 
-
-
-    args = get_args(argv);
-    // args도 "cmd arg1 arg2" 형태로 들어온다면 분리해서
-    /*
-        [
-            ["cmd1"],
-            ["arg1"],
-            ["arg2"] 
-        ]
-     형태로 변환해야함.
-    */ 
-    // execve(cmd, args, envp);
+    cmd_suffix = ft_strjoin("/", args[0]);
+    cmd = get_cmd_path(cmd_suffix, envp);
+    execve(cmd, args, envp);
+    free(cmd_suffix);
+    free_matrix(args);
 }
 
 // 제출시 makefile 의 CC, CFLAG 원복 해놓기
 int main(int argc, char **argv, char **envp)
 {
-    exec(argv, envp);
+    exec(argv[2], envp);
     return 0; 
 }
 
