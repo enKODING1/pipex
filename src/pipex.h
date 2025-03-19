@@ -1,17 +1,29 @@
-# ifndef PIPEX_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/19 17:11:41 by skang             #+#    #+#             */
+/*   Updated: 2025/03/19 17:11:42 by skang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PIPEX_H
 # define PIPEX_H
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sched.h>
-#include <wait.h>
-#include <fcntl.h>
-#include "libft.h"
+# include "libft.h"
+# include <fcntl.h>
+# include <sched.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <wait.h>
 
 /*memory*/
-void free_matrix(char **matrix);
+void	free_matrix(char **matrix);
 /*exec utils*/
-char *get_cmd_path(char *cmd, char **envp);
-void exec(char *argv, char **envp);
+char	*get_cmd_path(char *cmd, char **envp);
+void	exec(char *argv, char **envp);
 
 #endif
