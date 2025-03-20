@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/20 15:43:36 by skang             #+#    #+#             */
+/*   Updated: 2025/03/20 15:44:22 by skang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 void	child_process(char *argv, char **envp)
 {
-	int fd[2];
-	pid_t pid;
+	int		fd[2];
+	pid_t	pid;
 
 	pipe(fd);
 	pid = fork();
-
 	if (pid < 0)
 		exit(0);
 	if (pid == 0)
@@ -26,23 +37,22 @@ void	child_process(char *argv, char **envp)
 
 void	here_doc(char *limiter, char **envp)
 {
-	int fd[2];	
-	int pid;
-	char *str;
+	int		fd[2];
+	int		pid;
+	char	*str;
 
 	pipe(fd);
 	pid = fork();
-
-	if(pid < 0)
+	if (pid < 0)
 		exit(0);
-
-	if(pid == 0)
+	if (pid == 0)
 	{
 		close(fd[0]);
-		while(1)
+		while (1)
 		{
+			ft_putstr_fd("pipe heredoc> ", 0);
 			str = get_next_line(0);
-			if (ft_strncmp(str, limiter, ft_strlen(limiter)) == 0)	
+			if (ft_strncmp(str, limiter, ft_strlen(limiter)) == 0)
 			{
 				exit(0);
 			}
@@ -58,36 +68,34 @@ void	here_doc(char *limiter, char **envp)
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	int infile;
-	int outfile;
-	int i;
+	int	infile;
+	int	outfile;
+	int	i;
 
-	if(argc >= 5)	
+	if (argc >= 5)
 	{
-		if (ft_strncmp(argv[1], "here_doc", 8) == 0)	
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		{
 			i = 3;
-			outfile = open(argv[argc-1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
 			here_doc(argv[2], envp);
 		}
 		else
 		{
 			i = 2;
-			infile = open(argv[1], O_RDONLY, 0777);	
-			outfile = open(argv[argc-1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			infile = open(argv[1], O_RDONLY, 0777);
+			outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			dup2(infile, STDIN_FILENO);
 		}
-		
 	}
-
 	while (i < argc - 2)
 	{
-		child_process(argv[i], envp);	
+		child_process(argv[i], envp);
 		i++;
 	}
 	dup2(outfile, STDOUT_FILENO);
 	exec(argv[i], envp);
-	return 0;
+	return (0);
 }

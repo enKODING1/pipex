@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:29 by skang             #+#    #+#             */
-/*   Updated: 2025/03/19 17:11:30 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/20 15:44:26 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ void	child_process(int *fd, char **argv, char **envp)
 	int	infile_fd;
 
 	infile_fd = open(argv[1], O_RDONLY, 0777);
-	// 스트림 흐름제어
-	dup2(fd[1], STDOUT_FILENO);    
-	dup2(infile_fd, STDIN_FILENO); // 읽기는 입력으로
-	close(fd[0]);                  //     exec(argv, envp);
-		    close(infile_fd);
+	dup2(fd[1], STDOUT_FILENO);
+	dup2(infile_fd, STDIN_FILENO);
+	close(fd[0]);
+	close(infile_fd);
 	exec(argv[2], envp);
 	exit(0);
 }
@@ -31,16 +30,14 @@ void	parent_process(int *fd, char **argv, char **envp)
 	int	outfile_fd;
 
 	outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	// 스트림 흐름제어
-	dup2(fd[0], STDIN_FILENO);       // 모든 입력은 pipe로
-	dup2(outfile_fd, STDOUT_FILENO); // 쓰기는 출력으로
+	dup2(fd[0], STDIN_FILENO);
+	dup2(outfile_fd, STDOUT_FILENO);
 	close(fd[1]);
 	exec(argv[3], envp);
 	close(outfile_fd);
 	exit(0);
 }
 
-// 인자값, 에러 처리등은 아직 하지 않음.
 int	main(int argc, char *argv[], char **envp)
 {
 	int	fd[2];
