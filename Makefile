@@ -1,12 +1,10 @@
-CC = gcc
-CFLAG = 
-# CC = cc -g
-# CFLAG = -Wall -Wextra -Werror
+CC = cc -g
+CFLAG = -Wall -Wextra -Werror
 NAME = pipex
 NAME_BONUS = pipex_bonus
 
-SOURCES = ./src/pipex.c ./src/utils.c
-SOURCES_BONUS = ./src/pipex_bonus.c ./src/utils.c ./src/utils_bonus.c
+SOURCES = ./src/pipex.c ./src/utils.c ./src/error.c
+SOURCES_BONUS = ./src/pipex_bonus.c ./src/utils.c ./src/utils_bonus.c ./src/error.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS_BONUS = $(SOURCES_BONUS:.c=.o)
 

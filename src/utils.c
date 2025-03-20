@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:34 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 17:37:52 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/20 19:49:57 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,22 @@ char	*get_cmd_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-void	exec(char *argv, char **envp)
+void	exec_with_shell(char *argv, char **envp)
+{
+	char	*sh_args[4];
+
+	sh_args[0] = "/bin/sh";
+	sh_args[1] = "-c";
+	sh_args[2] = argv;
+	sh_args[3] = NULL;
+	if (execve("/bin/sh", sh_args, envp) == -1)
+	{
+		perror("execve with shell");
+		exit(126);
+	}
+}
+
+void	exec_direct(char *argv, char **envp)
 {
 	char	*cmd_suffix;
 	char	*cmd;
@@ -67,16 +82,28 @@ void	exec(char *argv, char **envp)
 	args = ft_split(argv, ' ');
 	cmd_suffix = ft_strjoin("/", args[0]);
 	cmd = get_cmd_path(cmd_suffix, envp);
+	free(cmd_suffix);
+	if (cmd == NULL)
+	{
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_matrix(args);
+		exit(127);
+	}
 	if (execve(cmd, args, envp) == -1)
 	{
-		error();
-		free(cmd_suffix);
+		perror("execve");
+		free(cmd);
 		free_matrix(args);
+		exit(126);
 	}
 }
 
-void	error(void)
+void	exec(char *argv, char **envp)
 {
-	perror("Error");
-	exit(0);
+	if (ft_strchr(argv, '\'') || ft_strchr(argv, '\"'))
+		exec_with_shell(argv, envp);
+	else
+		exec_direct(argv, envp);
 }
