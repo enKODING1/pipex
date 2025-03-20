@@ -6,7 +6,7 @@ NAME = pipex
 NAME_BONUS = pipex_bonus
 
 SOURCES = ./src/pipex.c ./src/utils.c
-SOURCES_BONUS = ./src/pipex_bonus.c ./src/utils.c
+SOURCES_BONUS = ./src/pipex_bonus.c ./src/utils.c ./src/utils_bonus.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS_BONUS = $(SOURCES_BONUS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:41 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 15:44:31 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/20 17:38:01 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 # include "get_next_line.h"
 # include "libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <sched.h>
 # include <stdio.h>
@@ -26,5 +27,10 @@ void	free_matrix(char **matrix);
 /*exec utils*/
 char	*get_cmd_path(char *cmd, char **envp);
 void	exec(char *argv, char **envp);
+/*here_doc*/
+void	here_doc_put(char *limiter, int fd);
+void	here_doc(char *limiter, char **envp);
+/*error*/
+void	error(void);
 
 #endif

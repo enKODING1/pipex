@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:34 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 15:44:35 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/20 17:37:52 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,16 @@ void	exec(char *argv, char **envp)
 	args = ft_split(argv, ' ');
 	cmd_suffix = ft_strjoin("/", args[0]);
 	cmd = get_cmd_path(cmd_suffix, envp);
-	execve(cmd, args, envp);
-	free(cmd_suffix);
-	free_matrix(args);
+	if (execve(cmd, args, envp) == -1)
+	{
+		error();
+		free(cmd_suffix);
+		free_matrix(args);
+	}
+}
+
+void	error(void)
+{
+	perror("Error");
+	exit(0);
 }
