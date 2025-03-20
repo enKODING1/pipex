@@ -22,12 +22,12 @@ bonus:$(NAME_BONUS)
 
 $(NAME): $(LIBFT_LIB) $(OBJECTS)
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
-	-I $(PIPEX_DIR) -I $(LIBFT_DIR) \
+	-I $(PIPEX_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) \
 	-L$(LIBFT_DIR) -lft
 
 $(NAME_BONUS): $(LIBFT_LIB) $(GNL_LIB) $(OBJECTS_BONUS) 
 	$(CC) $(CFLAG) -o $(NAME_BONUS) $(OBJECTS_BONUS) \
-	-I $(PIPEX_DIR) -I $(LIBFT_DIR) -I$(GNL_DIR) \
+	-I $(PIPEX_DIR) -I $(LIBFT_DIR) -I $(GNL_DIR) \
 	-L $(LIBFT_DIR) -lft \
 	-L $(GNL_DIR) -lgnl 
 
@@ -40,7 +40,7 @@ $(GNL_LIB):
 	make -C $(GNL_DIR)
 
 %.o: %.c
-	$(CC) $(CFLAG) -c $< -o $@ -I $(LIBFT_DIR) 
+	$(CC) $(CFLAG) -c $< -o $@ -I $(LIBFT_DIR) -I $(GNL_DIR)
 	
 clean:
 	make clean -C $(LIBFT_DIR)	
