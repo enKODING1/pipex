@@ -13,6 +13,7 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 # include "libft.h"
+# include "get_next_line.h"
 # include <fcntl.h>
 # include <sched.h>
 # include <stdio.h>
