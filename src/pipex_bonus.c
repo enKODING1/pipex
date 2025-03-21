@@ -55,7 +55,7 @@ static int	run_multi_pipe(char *infile, char *outfile)
 	int	infile_fd;
 	int	outfile_fd;
 
-	infile_fd = open(infile, O_RDONLY, 0777);
+	infile_fd = open(infile, O_RDONLY);
 	outfile_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (infile_fd == -1)
 	{

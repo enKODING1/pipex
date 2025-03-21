@@ -32,7 +32,7 @@ static void	gnl_read_eof(void)
 	}
 }
 
-void	here_doc_put(char *limiter, int fd)
+static void	here_doc_put(char *limiter, int fd)
 {
 	char	*str;
 	int		diff;

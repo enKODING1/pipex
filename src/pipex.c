@@ -16,7 +16,7 @@ static void	child_process(int *fd, char **argv, char **envp)
 {
 	int	infile_fd;
 
-	infile_fd = open(argv[1], O_RDONLY, 0777);
+	infile_fd = open(argv[1], O_RDONLY);
 	if (infile_fd == -1)
 		error(fd);
 	close(fd[0]);
