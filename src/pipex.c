@@ -18,7 +18,7 @@ static void	child_process(int *fd, char **argv, char **envp)
 
 	infile_fd = open(argv[1], O_RDONLY, 0777);
 	if (infile_fd == -1)
-		error();
+		error(fd);
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
@@ -34,7 +34,7 @@ static void	parent_process(int *fd, char **argv, char **envp)
 
 	outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile_fd == -1)
-		error();
+		error(fd);
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
@@ -52,10 +52,10 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
-			error();
+			error(fd);
 		pid = fork();
 		if (pid == -1)
-			error();
+			error(fd);
 		if (pid == 0)
 			child_process(fd, argv, envp);
 		waitpid(pid, NULL, 0);

@@ -31,6 +31,6 @@ void	exec(char *argv, char **envp);
 void	here_doc_put(char *limiter, int fd);
 void	here_doc(char *limiter);
 /*error*/
-void	error(void);
+void	error(int *fd);
 
 #endif

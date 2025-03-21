@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:43:36 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 18:10:23 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/21 12:37:03 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static void	child_process(char *argv, char **envp)
 	pid_t	pid;
 
 	if (pipe(fd) == -1)
-		error();
+		error(NULL);
 	pid = fork();
 	if (pid == -1)
-		error();
+		error(fd);
 	if (pid == 0)
 	{
 		close(fd[0]);
@@ -45,7 +45,7 @@ static int	run_here_doc(char *file, char *limiter)
 
 	outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (outfile == -1)
-		error();
+		error(NULL);
 	here_doc(limiter);
 	return (outfile);
 }
@@ -57,9 +57,18 @@ static int	run_multi_pipe(char *infile, char *outfile)
 
 	infile_fd = open(infile, O_RDONLY, 0777);
 	outfile_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (infile_fd == -1 || outfile_fd == -1)
-		error();
+	if (infile_fd == -1)
+	{
+		close(outfile_fd);
+		error(NULL);
+	}
+	if (outfile_fd == -1)
+	{
+		close(infile_fd);
+		error(NULL);
+	}
 	dup2(infile_fd, STDIN_FILENO);
+	close(infile_fd);
 	return (outfile_fd);
 }
 
@@ -68,26 +77,25 @@ int	main(int argc, char **argv, char **envp)
 	int	outfile;
 	int	i;
 
-	if (argc >= 5)
+	if (argc < 5)
+		error(NULL);
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
-		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
-		{
-			i = 3;
-			outfile = run_here_doc(argv[argc - 1], argv[2]);
-		}
-		else
-		{
-			i = 2;
-			outfile = run_multi_pipe(argv[1], argv[argc - 1]);
-		}
-		while (i < argc - 2)
-		{
-			child_process(argv[i], envp);
-			i++;
-		}
-		dup2(outfile, STDOUT_FILENO);
-		exec(argv[i], envp);
+		i = 3;
+		outfile = run_here_doc(argv[argc - 1], argv[2]);
 	}
-	ft_putstr_fd("arguments error\n", 2);
+	else
+	{
+		i = 2;
+		outfile = run_multi_pipe(argv[1], argv[argc - 1]);
+	}
+	while (i < argc - 2)
+	{
+		child_process(argv[i], envp);
+		i++;
+	}
+	dup2(outfile, STDOUT_FILENO);
+	close(outfile);
+	exec(argv[i], envp);
 	return (0);
 }

@@ -6,14 +6,19 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:50:05 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 19:50:06 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/21 12:34:28 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error(void)
+void	error(int *fd)
 {
+	if (fd)
+	{
+		close(fd[0]);
+		close(fd[1]);
+	}
 	perror("Error");
 	exit(0);
 }

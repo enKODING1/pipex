@@ -33,10 +33,10 @@ void	here_doc(char *limiter)
 	int		pid;
 
 	if (pipe(fd) == -1)
-		error();
+		error(NULL);
 	pid = fork();
 	if (pid == -1)
-		error();
+		error(NULL);
 	if (pid == 0)
 	{
 		close(fd[0]);
