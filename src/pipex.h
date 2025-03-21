@@ -29,7 +29,7 @@ char	*get_cmd_path(char *cmd, char **envp);
 void	exec(char *argv, char **envp);
 /*here_doc*/
 void	here_doc_put(char *limiter, int fd);
-void	here_doc(char *limiter);
+void	here_doc(char *limiter, int fd_handler);
 /*error*/
 void	error(int *fd);
 

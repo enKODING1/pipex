@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:43:36 by skang             #+#    #+#             */
-/*   Updated: 2025/03/21 12:37:03 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/21 14:03:29 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	run_here_doc(char *file, char *limiter)
 	outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (outfile == -1)
 		error(NULL);
-	here_doc(limiter);
+	here_doc(limiter, outfile);
 	return (outfile);
 }
 
@@ -78,9 +78,17 @@ int	main(int argc, char **argv, char **envp)
 	int	i;
 
 	if (argc < 5)
-		error(NULL);
+	{
+		ft_putstr_fd("Error\n", 2);
+		return (0);
+	}
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
+		if (argc != 6)
+		{
+			ft_putstr_fd("Error\n", 2);
+			return (0);
+		}
 		i = 3;
 		outfile = run_here_doc(argv[argc - 1], argv[2]);
 	}
@@ -97,5 +105,6 @@ int	main(int argc, char **argv, char **envp)
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec(argv[i], envp);
-	return (0);
+	ft_putstr_fd("Error: exec failed\n", 2);
+	exit(1);
 }
