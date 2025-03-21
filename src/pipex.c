@@ -6,13 +6,13 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:29 by skang             #+#    #+#             */
-/*   Updated: 2025/03/20 18:10:17 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/21 10:25:01 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_process(int *fd, char **argv, char **envp)
+static void	child_process(int *fd, char **argv, char **envp)
 {
 	int	infile_fd;
 
@@ -21,13 +21,14 @@ void	child_process(int *fd, char **argv, char **envp)
 		error();
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
 	dup2(infile_fd, STDIN_FILENO);
-	exec(argv[2], envp);
 	close(infile_fd);
+	exec(argv[2], envp);
 	exit(0);
 }
 
-void	parent_process(int *fd, char **argv, char **envp)
+static void	parent_process(int *fd, char **argv, char **envp)
 {
 	int	outfile_fd;
 
@@ -36,9 +37,10 @@ void	parent_process(int *fd, char **argv, char **envp)
 		error();
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
 	dup2(outfile_fd, STDOUT_FILENO);
-	exec(argv[3], envp);
 	close(outfile_fd);
+	exec(argv[3], envp);
 	exit(0);
 }
 
@@ -58,7 +60,8 @@ int	main(int argc, char **argv, char **envp)
 			child_process(fd, argv, envp);
 		waitpid(pid, NULL, 0);
 		parent_process(fd, argv, envp);
+		return (0);
 	}
 	ft_putstr_fd("Error\n", STDERR_FILENO);
-	return (0);
+	return (1);
 }

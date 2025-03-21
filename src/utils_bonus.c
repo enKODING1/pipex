@@ -27,11 +27,10 @@ void	here_doc_put(char *limiter, int fd)
 	}
 }
 
-void	here_doc(char *limiter, char **envp)
+void	here_doc(char *limiter)
 {
 	int		fd[2];
 	int		pid;
-	char	*str;
 
 	if (pipe(fd) == -1)
 		error();
