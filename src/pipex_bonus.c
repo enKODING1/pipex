@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:43:36 by skang             #+#    #+#             */
-/*   Updated: 2025/03/21 14:03:29 by skang            ###   ########.fr       */
+/*   Updated: 2025/03/21 16:40:38 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,8 @@ static int	run_multi_pipe(char *infile, char *outfile)
 	return (outfile_fd);
 }
 
-int	main(int argc, char **argv, char **envp)
+static int	validate_arguments(int argc, char **argv)
 {
-	int	outfile;
-	int	i;
-
 	if (argc < 5)
 	{
 		ft_putstr_fd("Error\n", 2);
@@ -89,6 +86,19 @@ int	main(int argc, char **argv, char **envp)
 			ft_putstr_fd("Error\n", 2);
 			return (0);
 		}
+	}
+	return (1);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	int	outfile;
+	int	i;
+
+	if (!validate_arguments(argc, argv))
+		return (0);
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	{
 		i = 3;
 		outfile = run_here_doc(argv[argc - 1], argv[2]);
 	}
@@ -105,6 +115,5 @@ int	main(int argc, char **argv, char **envp)
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec(argv[i], envp);
-	ft_putstr_fd("Error: exec failed\n", 2);
-	exit(1);
+	return (0);
 }
