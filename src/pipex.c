@@ -32,7 +32,7 @@ static void	parent_process(int *fd, char **argv, char **envp)
 {
 	int	outfile_fd;
 
-	outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	outfile_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (outfile_fd == -1)
 		error(fd);
 	close(fd[1]);

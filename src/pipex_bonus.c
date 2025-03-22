@@ -43,7 +43,7 @@ static int	run_here_doc(char *file, char *limiter)
 {
 	int	outfile;
 
-	outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (outfile == -1)
 		error(NULL);
 	here_doc(limiter, outfile);
@@ -56,7 +56,7 @@ static int	run_multi_pipe(char *infile, char *outfile)
 	int	outfile_fd;
 
 	infile_fd = open(infile, O_RDONLY);
-	outfile_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	outfile_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (infile_fd == -1)
 	{
 		close(outfile_fd);
