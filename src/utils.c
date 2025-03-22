@@ -35,7 +35,7 @@ char	*get_cmd_path(char *cmd, char **envp)
 	char	*result;
 	int		access_ok;
 	int		i;
-
+	// 절대경로, 현재경로 에서 실행 제대로 안됨, cd도 안됨.
 	i = 0;
 	path_list = NULL;
 	result = NULL;
@@ -78,12 +78,30 @@ void	exec_direct(char *argv, char **envp)
 	char	*cmd_suffix;
 	char	*cmd;
 	char	**args;
+	int		direct_run;
 
 	args = ft_split(argv, ' ');
-	cmd_suffix = ft_strjoin("/", args[0]);
-	cmd = get_cmd_path(cmd_suffix, envp);
-	free(cmd_suffix);
-	if (cmd == NULL)
+	// 절대경로, 현재경로 실행안됨
+	direct_run = 1;
+	if (ft_strchr(args[0], '/'))
+	{
+		if(access(args[0], X_OK) == 0)
+			cmd = args[0];
+		else
+		{
+			cmd = NULL;
+			direct_run = 0;
+		}
+	}
+	else
+	{
+		cmd_suffix = ft_strjoin("/", args[0]);
+		cmd = get_cmd_path(cmd_suffix, envp);
+		free(cmd_suffix);
+		direct_run = 0;
+	}
+
+	if (cmd == NULL && direct_run == 0)
 	{
 		ft_putstr_fd("Command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
