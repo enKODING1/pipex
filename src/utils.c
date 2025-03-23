@@ -58,21 +58,6 @@ char	*get_cmd_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-void	exec_with_shell(char *argv, char **envp)
-{
-	char	*sh_args[4];
-
-	sh_args[0] = "/bin/sh";
-	sh_args[1] = "-c";
-	sh_args[2] = argv;
-	sh_args[3] = NULL;
-	if (execve("/bin/sh", sh_args, envp) == -1)
-	{
-		perror("execve with shell");
-		exit(126);
-	}
-}
-
 void	exec_cmd(char *cmd, char **args, char **envp, int run_flag)
 {
 	if (cmd == NULL && run_flag == 0)
@@ -124,7 +109,10 @@ void	exec_direct(char *argv, char **envp)
 void	exec(char *argv, char **envp)
 {
 	if (ft_strchr(argv, '\'') || ft_strchr(argv, '\"'))
-		exec_with_shell(argv, envp);
+	{
+		ft_putstr_fd("Command error\n", 2);
+		exit(127);
+	}	
 	else
 		exec_direct(argv, envp);
 }
