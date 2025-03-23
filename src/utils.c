@@ -19,10 +19,6 @@ void	free_matrix(char **matrix)
 	if (!matrix)
 		return ;
 	i = 0;
-	if (!matrix)
-	{
-		ft_putstr_fd("null matrix", 2);
-	}
 	while (matrix[i])
 	{
 		free(matrix[i]);
