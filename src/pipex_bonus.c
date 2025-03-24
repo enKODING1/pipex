@@ -115,5 +115,6 @@ int	main(int argc, char **argv, char **envp)
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec(argv[i], envp);
+	ft_putstr_fd("Error\n", 2);
 	return (0);
 }

@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-void	free_matrix(char **matrix)
+static void	free_matrix(char **matrix)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ void	free_matrix(char **matrix)
 	matrix = NULL;
 }
 
-char	*get_cmd_path(char *cmd, char **envp)
+static char	*get_cmd_path(char *cmd, char **envp)
 {
 	char	**path_list;
 	char	*result;
@@ -58,7 +58,7 @@ char	*get_cmd_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-void	exec_cmd(char *cmd, char **args, char **envp, int run_flag)
+static void	exec_cmd(char *cmd, char **args, char **envp, int run_flag)
 {
 	if (cmd == NULL && run_flag == 0)
 	{
@@ -77,7 +77,7 @@ void	exec_cmd(char *cmd, char **args, char **envp, int run_flag)
 	}
 }
 
-void	exec_direct(char *argv, char **envp)
+static void	exec_direct(char *argv, char **envp)
 {
 	char	*cmd_suffix;
 	char	*cmd;
