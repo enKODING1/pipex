@@ -22,10 +22,7 @@
 # include <unistd.h>
 # include <wait.h>
 
-/*memory*/
-void	free_matrix(char **matrix);
 /*exec utils*/
-char	*get_cmd_path(char *cmd, char **envp);
 void	exec(char *argv, char **envp);
 /*here_doc*/
 void	here_doc(char *limiter, int fd_handler);
