@@ -108,6 +108,11 @@ static void	exec_direct(char *argv, char **envp)
 
 void	exec(char *argv, char **envp)
 {
+	if (ft_strlen(argv) == 0)
+	{
+		ft_putstr_fd("Permission denied\n", 2);
+		exit(13);
+	}
 	if (ft_strchr(argv, '\'') || ft_strchr(argv, '\"'))
 	{
 		ft_putstr_fd("Command error\n", 2);
