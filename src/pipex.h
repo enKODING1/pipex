@@ -23,7 +23,7 @@
 # include <wait.h>
 
 /*exec utils*/
-void	exec(char *argv, char **envp);
+void	exec(char *arg_cmd, char **envp);
 /*here_doc*/
 void	here_doc(char *limiter, int fd_handler);
 /*error*/

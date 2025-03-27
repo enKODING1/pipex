@@ -77,14 +77,14 @@ static void	exec_cmd(char *cmd, char **args, char **envp, int run_flag)
 	}
 }
 
-static void	exec_direct(char *argv, char **envp)
+static void	exec_direct(char *arg_cmd, char **envp)
 {
 	char	*cmd_suffix;
 	char	*cmd;
 	char	**args;
 	int		direct_run;
 
-	args = ft_split(argv, ' ');
+	args = ft_split(arg_cmd, ' ');
 	direct_run = 1;
 	if (ft_strchr(args[0], '/'))
 	{
@@ -106,18 +106,18 @@ static void	exec_direct(char *argv, char **envp)
 	exec_cmd(cmd, args, envp, direct_run);
 }
 
-void	exec(char *argv, char **envp)
+void	exec(char *arg_cmd, char **envp)
 {
-	if (ft_strlen(argv) == 0)
+	if (ft_strlen(arg_cmd) == 0)
 	{
 		ft_putstr_fd("Permission denied\n", 2);
 		exit(13);
 	}
-	if (ft_strchr(argv, '\'') || ft_strchr(argv, '\"'))
+	if (ft_strchr(arg_cmd, '\'') || ft_strchr(arg_cmd, '\"'))
 	{
 		ft_putstr_fd("Command error\n", 2);
 		exit(127);
 	}	
 	else
-		exec_direct(argv, envp);
+		exec_direct(arg_cmd, envp);
 }
