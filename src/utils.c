@@ -110,12 +110,14 @@ void	exec(char *arg_cmd, char **envp)
 {
 	if (ft_strlen(arg_cmd) == 0)
 	{
-		ft_putstr_fd("Permission denied\n", 2);
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putstr_fd(arg_cmd, 2);
+		ft_putstr_fd("\n", 2);
 		exit(13);
 	}
 	if (ft_strchr(arg_cmd, '\'') || ft_strchr(arg_cmd, '\"'))
 	{
-		ft_putstr_fd("Command error\n", 2);
+		ft_putstr_fd("Unable to execute the command\n", 2);
 		exit(127);
 	}	
 	else
