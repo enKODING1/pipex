@@ -6,13 +6,13 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 17:11:29 by skang             #+#    #+#             */
-/*   Updated: 2025/03/21 10:25:01 by skang            ###   ########.fr       */
+/*   Updated: 2025/06/27 23:00:40 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	child_process(int *fd, char **argv, char **envp)
+static void	child_input_process(int *fd, char **argv, char **envp)
 {
 	int	infile_fd;
 
@@ -28,7 +28,7 @@ static void	child_process(int *fd, char **argv, char **envp)
 	exit(0);
 }
 
-static void	parent_process(int *fd, char **argv, char **envp)
+static void	child_output_process(int *fd, char **argv, char **envp)
 {
 	int	outfile_fd;
 
@@ -44,24 +44,45 @@ static void	parent_process(int *fd, char **argv, char **envp)
 	exit(0);
 }
 
-int	main(int argc, char **argv, char **envp)
+static void	pipex(char **argv, char **envp)
 {
 	int	fd[2];
-	int	pid;
+	int	pid1;
+	int	pid2;
 
+	pid1 = -1;
+	pid2 = -1;
+	if (pipe(fd) == -1)
+		error(NULL);
+	pid1 = fork();
+	if (pid1 == -1)
+		error(fd);
+	if (pid1 == 0)
+		child_input_process(fd, argv, envp);
+	else
+	{
+		pid2 = fork();
+		if (pid2 == -1)
+			error(fd);
+		if (pid2 == 0)
+			child_output_process(fd, argv, envp);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
 	if (argc == 5)
 	{
-		if (pipe(fd) == -1)
-			error(fd);
-		pid = fork();
-		if (pid == -1)
-			error(fd);
-		if (pid == 0)
-			child_process(fd, argv, envp);
-		waitpid(pid, NULL, 0);
-		parent_process(fd, argv, envp);
-		return (0);
+		pipex(argv, envp);
 	}
-	ft_putstr_fd("Error\n", STDERR_FILENO);
-	return (1);
+	else
+	{
+		ft_putstr_fd("Error: Invalid arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	return (0);
 }
